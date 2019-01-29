@@ -9,6 +9,20 @@ impl RType {
     pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
 }
 
+pub struct CsrType(u32);
+impl CsrType {
+    pub fn csr(&self) -> u32 { (self.0 >> 20) }
+    pub fn rs1(&self) -> u32 { (self.0 >> 15) & 0x1f }
+    pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
+}
+
+pub struct CsrIType(u32);
+impl CsrIType {
+    pub fn csr(&self) -> u32 { (self.0 >> 20) }
+    pub fn zimm(&self) -> u32 { (self.0 >> 15) & 0x1f }
+    pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
+}
+
 pub struct IType(u32);
 pub struct SType(u32);
 pub struct BType(u32);
@@ -23,6 +37,13 @@ pub enum Instruction {
     Mret,
     Wfi,
     SfenceVma(RType),
+
+    Csrrw(CsrType),
+    Csrrs(CsrType),
+    Csrrc(CsrType),
+    Csrrwi(CsrIType),
+    Csrrsi(CsrIType),
+    Csrrci(CsrIType),
 }
 
 fn decode_opcode(i: u32) -> u32 { i & 0x3f }
@@ -46,6 +67,16 @@ pub fn try_decode_system(i: u32) -> Option<Instruction> {
         // Interrupt-Management Instructions
         0b0001000_00101_00000_000_00000_1110011 => return Some(Instruction::Wfi),
         _ => {},
+    }
+
+    match (i >> 12) & 0b111 {
+        0b001 => return Some(Instruction::Csrrw(CsrType(i))),
+        0b010 => return Some(Instruction::Csrrs(CsrType(i))),
+        0b011 => return Some(Instruction::Csrrc(CsrType(i))),
+        0b101 => return Some(Instruction::Csrrwi(CsrIType(i))),
+        0b110 => return Some(Instruction::Csrrsi(CsrIType(i))),
+        0b111 => return Some(Instruction::Csrrci(CsrIType(i))),
+        _ => {}
     }
 
     // Memory-Management Instructions
