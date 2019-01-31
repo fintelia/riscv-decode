@@ -1,5 +1,6 @@
 #![no_std]
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct RType(pub u32);
 impl RType {
     pub fn funct7(&self) -> u32 { (self.0 >> 25) & 0x7f }
@@ -9,6 +10,7 @@ impl RType {
     pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
 }
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct CsrType(u32);
 impl CsrType {
     pub fn csr(&self) -> u32 { (self.0 >> 20) }
@@ -16,6 +18,7 @@ impl CsrType {
     pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
 }
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct CsrIType(u32);
 impl CsrIType {
     pub fn csr(&self) -> u32 { (self.0 >> 20) }
@@ -23,12 +26,18 @@ impl CsrIType {
     pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
 }
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct IType(u32);
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct SType(u32);
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct BType(u32);
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct UType(u32);
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct JType(u32);
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Instruction {
     Ecall,
     Ebreak,
@@ -46,7 +55,7 @@ pub enum Instruction {
     Csrrci(CsrIType),
 }
 
-fn decode_opcode(i: u32) -> u32 { i & 0x3f }
+fn decode_opcode(i: u32) -> u32 { i & 0x7f }
 
 pub fn try_decode(i: u32) -> Option<Instruction> {
     match decode_opcode(i) {
