@@ -28,6 +28,12 @@ impl CsrIType {
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct IType(u32);
+impl IType {
+    pub fn imm(&self) -> u32 { (self.0 >> 20) }
+    pub fn rs1(&self) -> u32 { (self.0 >> 15) & 0x1f }
+    pub fn rd(&self) -> u32 { (self.0 >> 7) & 0x1f }
+}
+
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct SType(u32);
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -39,6 +45,22 @@ pub struct JType(u32);
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Instruction {
+    // Load
+    Lb(IType),
+    Lh(IType),
+    Lw(IType),
+    Lbu(IType),
+    Lhu(IType),
+    Lwu(IType),
+    Ld(IType),
+
+    // Store
+    Sb(IType),
+    Sh(IType),
+    Sw(IType),
+    Sd(IType),
+
+    // System
     Ecall,
     Ebreak,
     Uret,
@@ -46,7 +68,6 @@ pub enum Instruction {
     Mret,
     Wfi,
     SfenceVma(RType),
-
     Csrrw(CsrType),
     Csrrs(CsrType),
     Csrrc(CsrType),
@@ -60,6 +81,32 @@ fn decode_opcode(i: u32) -> u32 { i & 0x7f }
 pub fn try_decode(i: u32) -> Option<Instruction> {
     match decode_opcode(i) {
         0b1110011 => try_decode_system(i),
+        0b0000011 => try_decode_load(i),
+        0b0100011 => try_decode_store(i),
+        _ => None,
+    }
+}
+
+pub fn try_decode_load(i: u32) -> Option<Instruction> {
+    match (i >> 12) & 0b111 {
+        0b000 => Some(Instruction::Lb(IType(i))),
+        0b001 => Some(Instruction::Lh(IType(i))),
+        0b010 => Some(Instruction::Lw(IType(i))),
+        0b011 => Some(Instruction::Ld(IType(i))),
+        0b100 => Some(Instruction::Lbu(IType(i))),
+        0b101 => Some(Instruction::Lhu(IType(i))),
+        0b110 => Some(Instruction::Lwu(IType(i))),
+        0b111 => None,
+        _ => unreachable!(),
+    }
+}
+
+pub fn try_decode_store(i: u32) -> Option<Instruction> {
+    match (i >> 12) & 0b111 {
+        0b000 => Some(Instruction::Sb(IType(i))),
+        0b001 => Some(Instruction::Sh(IType(i))),
+        0b010 => Some(Instruction::Sw(IType(i))),
+        0b011 => Some(Instruction::Sd(IType(i))),
         _ => None,
     }
 }
