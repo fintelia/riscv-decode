@@ -36,6 +36,12 @@ impl IType {
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct SType(u32);
+impl SType {
+    pub fn imm(&self) -> u32 { ((self.0 >> 20) & 0xfe0) | ((self.0 >> 7) & 0x1f) }
+    pub fn rs1(&self) -> u32 { (self.0 >> 15) & 0x1f }
+    pub fn rs2(&self) -> u32 { (self.0 >> 20) & 0x1f }
+}
+
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct BType(u32);
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -55,10 +61,10 @@ pub enum Instruction {
     Ld(IType),
 
     // Store
-    Sb(IType),
-    Sh(IType),
-    Sw(IType),
-    Sd(IType),
+    Sb(SType),
+    Sh(SType),
+    Sw(SType),
+    Sd(SType),
 
     // System
     Ecall,
@@ -103,10 +109,10 @@ pub fn try_decode_load(i: u32) -> Option<Instruction> {
 
 pub fn try_decode_store(i: u32) -> Option<Instruction> {
     match (i >> 12) & 0b111 {
-        0b000 => Some(Instruction::Sb(IType(i))),
-        0b001 => Some(Instruction::Sh(IType(i))),
-        0b010 => Some(Instruction::Sw(IType(i))),
-        0b011 => Some(Instruction::Sd(IType(i))),
+        0b000 => Some(Instruction::Sb(SType(i))),
+        0b001 => Some(Instruction::Sh(SType(i))),
+        0b010 => Some(Instruction::Sw(SType(i))),
+        0b011 => Some(Instruction::Sd(SType(i))),
         _ => None,
     }
 }
