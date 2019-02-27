@@ -1,5 +1,7 @@
 #![no_std]
 
+mod compressed;
+
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct RType(pub u32);
 impl RType {
@@ -80,16 +82,24 @@ pub enum Instruction {
     Csrrwi(CsrIType),
     Csrrsi(CsrIType),
     Csrrci(CsrIType),
+
+    Illegal,
 }
 
 fn decode_opcode(i: u32) -> u32 { i & 0x7f }
 
 pub fn try_decode(i: u32) -> Option<Instruction> {
-    match decode_opcode(i) {
-        0b1110011 => try_decode_system(i),
-        0b0000011 => try_decode_load(i),
-        0b0100011 => try_decode_store(i),
-        _ => None,
+    match i & 0b11 {
+        0b00 => compressed::try_decode_q00(i),
+        0b01 => compressed::try_decode_q01(i),
+        0b10 => compressed::try_decode_q10(i),
+        0b11 => match decode_opcode(i) {
+            0b1110011 => try_decode_system(i),
+            0b0000011 => try_decode_load(i),
+            0b0100011 => try_decode_store(i),
+            _ => None,
+        }
+        _ => unreachable!(),
     }
 }
 
