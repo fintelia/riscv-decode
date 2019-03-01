@@ -3,5 +3,10 @@ name = "riscv-decode"
 version = "0.1.0"
 authors = ["Jonathan Behrens <fintelia@gmail.com>"]
 edition = "2018"
+description = "A simple library for decoding RISC-V instructions"
+repository = "https://github.com/fintelia/riscv-decode"
+license = "MIT/Apache-2.0"
+categories = ["no-std", "embedded", "encoding", "parsing"]
+keywords = ["riscv"]
 
 [dependencies]
