@@ -2,6 +2,26 @@ use crate::types::*;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Instruction {
+    // LUI
+    Lui(UType),
+
+    // AUIPC
+    Auipc(UType),
+
+    // Jal
+    Jal(JType),
+
+    // Jalr
+    Jalr(IType),
+
+    // Branch
+    Beq(BType),
+    Bne(BType),
+    Blt(BType),
+    Bge(BType),
+    Bltu(BType),
+    Bgeu(BType),
+
     // Load
     Lb(IType),
     Lh(IType),
@@ -16,24 +36,6 @@ pub enum Instruction {
     Sh(SType),
     Sw(SType),
     Sd(SType),
-
-    // Branch
-    Beq(BType),
-    Bne(BType),
-    Blt(BType),
-    Bge(BType),
-    Bltu(BType),
-    Bgeu(BType),
-
-    // Jalr
-    Jalr(IType),
-
-    // Misc-mem
-    Fence(FenceType),
-    FenceI,
-
-    // Jal
-    Jal(JType),
 
     // OP-imm
     Addi(IType),
@@ -66,6 +68,10 @@ pub enum Instruction {
     Rem(RType),
     Remu(RType),
 
+    // Misc-mem
+    Fence(FenceType),
+    FenceI,
+
     // System
     Ecall,
     Ebreak,
@@ -80,12 +86,6 @@ pub enum Instruction {
     Csrrwi(CsrIType),
     Csrrsi(CsrIType),
     Csrrci(CsrIType),
-
-    // AUIPC
-    Auipc(UType),
-
-    // LUI
-    Lui(UType),
 
     // OP-imm 32
     Addiw(IType),
