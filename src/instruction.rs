@@ -105,6 +105,30 @@ pub enum Instruction {
     Remw(RType),
     Remuw(RType),
 
+    // RV32F Extension
+    Flw(IType),
+    Fsw(SType),
+    FaddS(RType),
+    FsubS(RType),
+    FmulS(RType),
+    FdivS(RType),
+    FsqrtS(RType),
+    FsgnjS(RType),
+    FsgnjnS(RType),
+    FsgnjxS(RType),
+    FminS(RType),
+    FmaxS(RType),
+    FcvtWS(RType),
+    FcvtWuS(RType),
+    FmvXW(RType),
+    FeqS(RType),
+    FltS(RType),
+    FleS(RType),
+    FclassS(RType),
+    FcvtSW(RType),
+    FcftSWu(RType),
+    FmvWX(RType),
+
     // Illegal
     Illegal,
 

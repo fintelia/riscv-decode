@@ -52,7 +52,7 @@ pub fn decode(i: u32) -> DecodingResult {
         0b10 => compressed::decode_q10(i),
         0b11 => match (i >> 2) & 0b11111 {
             0b00000 => decode_load(i),
-            0b00001 => Err(DecodingError::Unimplemented), // Load-FP
+            0b00001 if (i >> 12) & 0b111 == 0b010 => Ok(Instruction::Flw(IType(i))),
             0b00010 => Err(DecodingError::Custom),
             0b00011 => decode_misc_mem(i),
             0b00100 => decode_op_imm(i),
@@ -61,7 +61,7 @@ pub fn decode(i: u32) -> DecodingResult {
             0b00111 => Err(DecodingError::Reserved), // 48bit instruction
 
             0b01000 => decode_store(i),
-            0b01001 => Err(DecodingError::Unimplemented), // Store-FP
+            0b01001 if (i >> 12) & 0b111 == 0b010 => Ok(Instruction::Fsw(SType(i))),
             0b01010 => Err(DecodingError::Custom),
             0b01011 => Err(DecodingError::Unimplemented), // AMO
             0b01100 => decode_op(i),
@@ -73,7 +73,7 @@ pub fn decode(i: u32) -> DecodingResult {
             0b10001 => Err(DecodingError::Unimplemented), // MSUB
             0b10010 => Err(DecodingError::Unimplemented), // NMSUB
             0b10011 => Err(DecodingError::Unimplemented), // NMADD
-            0b10100 => Err(DecodingError::Unimplemented), // OP-FP
+            0b10100 => decode_opfp(i),                    // OP-FP
             0b10101 => Err(DecodingError::Reserved),
             0b10110 => Err(DecodingError::Custom),
             0b10111 => Err(DecodingError::Reserved), // 48bit instruction
@@ -89,6 +89,50 @@ pub fn decode(i: u32) -> DecodingResult {
             _ => unreachable!(),
         },
         _ => unreachable!(),
+    }
+}
+
+fn decode_opfp(i: u32) -> Result<Instruction, DecodingError> {
+    match (i >> 25) & 0b1111111 {
+        0b0000000 => Ok(Instruction::FaddS(RType(i))),
+        0b0000100 => Ok(Instruction::FsubS(RType(i))),
+        0b0001000 => Ok(Instruction::FmulS(RType(i))),
+        0b0001100 => Ok(Instruction::FdivS(RType(i))),
+        0b0101100 if i >> 20 & 0b11111 == 0 => Ok(Instruction::FsqrtS(RType(i))),
+        0b0010000 => match i >> 12 & 0b111 {
+            0b000 => Ok(Instruction::FsgnjS(RType(i))),
+            0b001 => Ok(Instruction::FsgnjnS(RType(i))),
+            0b010 => Ok(Instruction::FsgnjxS(RType(i))),
+            _ => Err(DecodingError::Unknown),
+        },
+        0b0010100 => match i >> 12 & 0b111 {
+            0b000 => Ok(Instruction::FminS(RType(i))),
+            0b001 => Ok(Instruction::FmaxS(RType(i))),
+            _ => Err(DecodingError::Unknown),
+        },
+        0b1100000 => match i >> 20 & 0b11111 {
+            0b00000 => Ok(Instruction::FcvtWS(RType(i))),
+            0b00001 => Ok(Instruction::FcvtWuS(RType(i))),
+            _ => Err(DecodingError::Unknown),
+        },
+        0b1110000 if i >> 20 & 0b11111 == 0 && i >> 12 & 0b111 == 0 => {
+            Ok(Instruction::FmvXW(RType(i)))
+        }
+        0b1010000 => match i >> 12 & 0b111 {
+            0b010 => Ok(Instruction::FeqS(RType(i))),
+            0b001 => Ok(Instruction::FltS(RType(i))),
+            0b000 => Ok(Instruction::FleS(RType(i))),
+            _ => Err(DecodingError::Unknown),
+        },
+        0b1110000 if i >> 20 & 0b11111 == 0 && i >> 12 & 0b111 == 0b001 => {
+            Ok(Instruction::FclassS(RType(i)))
+        }
+        0b1101000 if i >> 20 & 0b11111 == 0 => Ok(Instruction::FcvtSW(RType(i))),
+        0b1101000 if i >> 20 & 0b11111 == 1 => Ok(Instruction::FcftSWu(RType(i))),
+        0b1111000 if i >> 20 & 0b11111 == 0 && i >> 12 & 0b111 == 0 => {
+            Ok(Instruction::FmvWX(RType(i)))
+        }
+        _ => Err(DecodingError::Unknown),
     }
 }
 
