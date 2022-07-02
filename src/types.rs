@@ -16,7 +16,7 @@ impl RType {
 pub struct CsrType(pub u32);
 impl CsrType {
     pub fn csr(&self) -> u32 {
-        (self.0 >> 20)
+        self.0 >> 20
     }
     pub fn rs1(&self) -> u32 {
         (self.0 >> 15) & 0x1f
@@ -30,7 +30,7 @@ impl CsrType {
 pub struct CsrIType(pub u32);
 impl CsrIType {
     pub fn csr(&self) -> u32 {
-        (self.0 >> 20)
+        self.0 >> 20
     }
     pub fn zimm(&self) -> u32 {
         (self.0 >> 15) & 0x1f
@@ -44,7 +44,7 @@ impl CsrIType {
 pub struct IType(pub u32);
 impl IType {
     pub fn imm(&self) -> u32 {
-        (self.0 >> 20)
+        self.0 >> 20
     }
     pub fn rs1(&self) -> u32 {
         (self.0 >> 15) & 0x1f

@@ -576,18 +576,18 @@ mod tests {
         assert_eq!(decode(0x00aa2027).unwrap(), Fsw(SType(0x00aa2027))); // fsw fa0,0(s4)
         assert_eq!(decode(0x00f4a027).unwrap(), Fsw(SType(0x00f4a027))); // fsw fa5,0(s1)
         assert_eq!(decode(0x00fba827).unwrap(), Fsw(SType(0x00fba827))); // fsw fa5,16(s7)
-        assert_eq!(decode(0xd19b1543).unwrap(), Fmadds(R4Type(0xd19b1543))); // fmadd.s	fa0,fs6,fs9,fs10,rtz
-        assert_eq!(decode(0x114f8bc3).unwrap(), Fmadds(R4Type(0x114f8bc3))); // fmadd.s	fs7,ft11,fs4,ft2,rne
-        assert_eq!(decode(0x08cf53c3).unwrap(), Fmadds(R4Type(0x08cf53c3))); // fmadd.s	ft7,ft10,fa2,ft1,unknown
-        assert_eq!(decode(0x3166dd47).unwrap(), Fmsubs(R4Type(0x3166dd47))); // fmsub.s	fs10,fa3,fs6,ft6,unknown
-        assert_eq!(decode(0x50077347).unwrap(), Fmsubs(R4Type(0x50077347))); // fmsub.s	ft6,fa4,ft0,fa0
-        assert_eq!(decode(0xb903e1c7).unwrap(), Fmsubs(R4Type(0xb903e1c7))); // fmsub.s	ft3,ft7,fa6,fs7,unknown
-        assert_eq!(decode(0xc9cd48cb).unwrap(), Fnmsubs(R4Type(0xc9cd48cb))); // fnmsub.s	fa7,fs10,ft8,fs9,rmm
-        assert_eq!(decode(0xa1ee44cb).unwrap(), Fnmsubs(R4Type(0xa1ee44cb))); // fnmsub.s	fs1,ft8,ft10,fs4,rmm
-        assert_eq!(decode(0xf8db734b).unwrap(), Fnmsubs(R4Type(0xf8db734b))); // fnmsub.s	ft6,fs6,fa3,ft11
-        assert_eq!(decode(0x19613e4f).unwrap(), Fnmadds(R4Type(0x19613e4f))); // fnmadd.s	ft8,ft2,fs6,ft3,rup
-        assert_eq!(decode(0xc944cfcf).unwrap(), Fnmadds(R4Type(0xc944cfcf))); // fnmadd.s	ft11,fs1,fs4,fs9,rmm
-        assert_eq!(decode(0x191506cf).unwrap(), Fnmadds(R4Type(0x191506cf))); // fnmadd.s	fa3,fa0,fa7,ft3,rne
+        assert_eq!(decode(0xd19b1543).unwrap(), Fmadds(R4Type(0xd19b1543))); // fmadd.s fa0,fs6,fs9,fs10,rtz
+        assert_eq!(decode(0x114f8bc3).unwrap(), Fmadds(R4Type(0x114f8bc3))); // fmadd.s fs7,ft11,fs4,ft2,rne
+        assert_eq!(decode(0x08cf53c3).unwrap(), Fmadds(R4Type(0x08cf53c3))); // fmadd.s ft7,ft10,fa2,ft1,unknown
+        assert_eq!(decode(0x3166dd47).unwrap(), Fmsubs(R4Type(0x3166dd47))); // fmsub.s fs10,fa3,fs6,ft6,unknown
+        assert_eq!(decode(0x50077347).unwrap(), Fmsubs(R4Type(0x50077347))); // fmsub.s ft6,fa4,ft0,fa0
+        assert_eq!(decode(0xb903e1c7).unwrap(), Fmsubs(R4Type(0xb903e1c7))); // fmsub.s ft3,ft7,fa6,fs7,unknown
+        assert_eq!(decode(0xc9cd48cb).unwrap(), Fnmsubs(R4Type(0xc9cd48cb))); // fnmsub.s fa7,fs10,ft8,fs9,rmm
+        assert_eq!(decode(0xa1ee44cb).unwrap(), Fnmsubs(R4Type(0xa1ee44cb))); // fnmsub.s fs1,ft8,ft10,fs4,rmm
+        assert_eq!(decode(0xf8db734b).unwrap(), Fnmsubs(R4Type(0xf8db734b))); // fnmsub.s ft6,fs6,fa3,ft11
+        assert_eq!(decode(0x19613e4f).unwrap(), Fnmadds(R4Type(0x19613e4f))); // fnmadd.s ft8,ft2,fs6,ft3,rup
+        assert_eq!(decode(0xc944cfcf).unwrap(), Fnmadds(R4Type(0xc944cfcf))); // fnmadd.s ft11,fs1,fs4,fs9,rmm
+        assert_eq!(decode(0x191506cf).unwrap(), Fnmadds(R4Type(0x191506cf))); // fnmadd.s fa3,fa0,fa7,ft3,rne
         assert_eq!(decode(0x0127f553).unwrap(), Fadds(RType(0x0127f553))); // fadd.s fa0,fa5,fs2
         assert_eq!(decode(0x01257553).unwrap(), Fadds(RType(0x01257553))); // fadd.s fa0,fa0,fs2
         assert_eq!(decode(0x0135f9d3).unwrap(), Fadds(RType(0x0135f9d3))); // fadd.s fs3,fa1,fs3
@@ -601,52 +601,52 @@ mod tests {
         assert_eq!(decode(0x18a7f553).unwrap(), Fdivs(RType(0x18a7f553))); // fdiv.s fa0,fa5,fa0
         assert_eq!(decode(0x18f777d3).unwrap(), Fdivs(RType(0x18f777d3))); // fdiv.s fa5,fa4,fa5
         assert_eq!(decode(0x58057553).unwrap(), Fsqrts(RType(0x58057553))); // fsqrt.s fa0,fa0
-        assert_eq!(decode(0x580e35d3).unwrap(), Fsqrts(RType(0x580e35d3))); // fsqrt.s	fa1,ft8,rup
-        assert_eq!(decode(0x5808c0d3).unwrap(), Fsqrts(RType(0x5808c0d3))); // fsqrt.s	ft1,fa7,rmm
-        assert_eq!(decode(0x21ca0ed3).unwrap(), Fsgnjs(RType(0x21ca0ed3))); // fsgnj.s	ft9,fs4,ft8
-        assert_eq!(decode(0x20d103d3).unwrap(), Fsgnjs(RType(0x20d103d3))); // fsgnj.s	ft7,ft2,fa3
-        assert_eq!(decode(0x209c0d53).unwrap(), Fsgnjs(RType(0x209c0d53))); // fsgnj.s	fs10,fs8,fs1
-        assert_eq!(decode(0x21dd1b53).unwrap(), Fsgnjns(RType(0x21dd1b53))); // fsgnjn.s	fs6,fs10,ft9
-        assert_eq!(decode(0x20971153).unwrap(), Fsgnjns(RType(0x20971153))); // fsgnjn.s	ft2,fa4,fs1
-        assert_eq!(decode(0x211d1953).unwrap(), Fsgnjns(RType(0x211d1953))); // fsgnjn.s	fs2,fs10,fa7
-        assert_eq!(decode(0x20eb2153).unwrap(), Fsgnjxs(RType(0x20eb2153))); // fsgnjx.s	ft2,fs6,fa4
-        assert_eq!(decode(0x219fa7d3).unwrap(), Fsgnjxs(RType(0x219fa7d3))); // fsgnjx.s	fa5,ft11,fs9
-        assert_eq!(decode(0x215baad3).unwrap(), Fsgnjxs(RType(0x215baad3))); // fsgnjx.s	fs5,fs7,fs5
-        assert_eq!(decode(0x286b82d3).unwrap(), Fmins(RType(0x286b82d3))); // fmin.s	ft5,fs7,ft6
-        assert_eq!(decode(0x29ac88d3).unwrap(), Fmins(RType(0x29ac88d3))); // fmin.s	fa7,fs9,fs10
-        assert_eq!(decode(0x29728c53).unwrap(), Fmins(RType(0x29728c53))); // fmin.s	fs8,ft5,fs7
-        assert_eq!(decode(0x29441153).unwrap(), Fmaxs(RType(0x29441153))); // fmax.s	ft2,fs0,fs4
-        assert_eq!(decode(0x29689fd3).unwrap(), Fmaxs(RType(0x29689fd3))); // fmax.s	ft11,fa7,fs6
-        assert_eq!(decode(0x286a1fd3).unwrap(), Fmaxs(RType(0x286a1fd3))); // fmax.s	ft11,fs4,ft6
-        assert_eq!(decode(0xc0056553).unwrap(), Fcvtws(RType(0xc0056553))); // fcvt.w.s	a0,fa0,unknown
-        assert_eq!(decode(0xc006fad3).unwrap(), Fcvtws(RType(0xc006fad3))); // fcvt.w.s	s5,fa3
-        assert_eq!(decode(0xc00fa8d3).unwrap(), Fcvtws(RType(0xc00fa8d3))); // fcvt.w.s	a7,ft11,rdn
-        assert_eq!(decode(0xc014cb53).unwrap(), Fcvtwus(RType(0xc014cb53))); // fcvt.wu.s	s6,fs1,rmm
-        assert_eq!(decode(0xc01698d3).unwrap(), Fcvtwus(RType(0xc01698d3))); // fcvt.wu.s	a7,fa3,rtz
-        assert_eq!(decode(0xc01e5dd3).unwrap(), Fcvtwus(RType(0xc01e5dd3))); // fcvt.wu.s	s11,ft8,unknown
-        assert_eq!(decode(0xe00482d3).unwrap(), Fmvxw(RType(0xe00482d3))); // fmv.x.w	t0,fs1
-        assert_eq!(decode(0xe00d86d3).unwrap(), Fmvxw(RType(0xe00d86d3))); // fmv.x.w	a3,fs11
-        assert_eq!(decode(0xe0088053).unwrap(), Fmvxw(RType(0xe0088053))); // fmv.x.w	zero,fa7
-        assert_eq!(decode(0xa0742153).unwrap(), Feqs(RType(0xa0742153))); // feq.s	sp,fs0,ft7
-        assert_eq!(decode(0xa0a0a153).unwrap(), Feqs(RType(0xa0a0a153))); // feq.s	sp,ft1,fa0
-        assert_eq!(decode(0xa1aba853).unwrap(), Feqs(RType(0xa1aba853))); // feq.s	a6,fs7,fs10
-        assert_eq!(decode(0xa0651953).unwrap(), Flts(RType(0xa0651953))); // flt.s	s2,fa0,ft6
-        assert_eq!(decode(0xa0ab9f53).unwrap(), Flts(RType(0xa0ab9f53))); // flt.s	t5,fs7,fa0
-        assert_eq!(decode(0xa19595d3).unwrap(), Flts(RType(0xa19595d3))); // flt.s	a1,fa1,fs9
-        assert_eq!(decode(0xa1ff8d53).unwrap(), Fles(RType(0xa1ff8d53))); // fle.s	s10,ft11,ft11
-        assert_eq!(decode(0xa0f40653).unwrap(), Fles(RType(0xa0f40653))); // fle.s	a2,fs0,fa5
-        assert_eq!(decode(0xa1ab0c53).unwrap(), Fles(RType(0xa1ab0c53))); // fle.s	s8,fs6,fs10
-        assert_eq!(decode(0xe00a1e53).unwrap(), Fclasss(RType(0xe00a1e53))); // fclass.s	t3,fs4
-        assert_eq!(decode(0xe00f1c53).unwrap(), Fclasss(RType(0xe00f1c53))); // fclass.s	s8,ft10
-        assert_eq!(decode(0xe00e9d53).unwrap(), Fclasss(RType(0xe00e9d53))); // fclass.s	s10,ft9
-        assert_eq!(decode(0xd009d7d3).unwrap(), Fcvtsw(RType(0xd009d7d3))); // fcvt.s.w	fa5,s3,unknown
-        assert_eq!(decode(0xd001a953).unwrap(), Fcvtsw(RType(0xd001a953))); // fcvt.s.w	fs2,gp,rdn
-        assert_eq!(decode(0xd00507d3).unwrap(), Fcvtsw(RType(0xd00507d3))); // fcvt.s.w	fa5,a0,rne
-        assert_eq!(decode(0xd01c27d3).unwrap(), Fcvtswu(RType(0xd01c27d3))); // fcvt.s.wu	fa5,s8,rdn
-        assert_eq!(decode(0xd019edd3).unwrap(), Fcvtswu(RType(0xd019edd3))); // fcvt.s.wu	fs11,s3,unknown
-        assert_eq!(decode(0xd012c3d3).unwrap(), Fcvtswu(RType(0xd012c3d3))); // fcvt.s.wu	ft7,t0,rmm
-        assert_eq!(decode(0xf0000e53).unwrap(), Fmvwx(RType(0xf0000e53))); // fmv.w.x	ft8,zero
-        assert_eq!(decode(0xf0098053).unwrap(), Fmvwx(RType(0xf0098053))); // fmv.w.x	ft0,s3
-        assert_eq!(decode(0xf00081d3).unwrap(), Fmvwx(RType(0xf00081d3))); // fmv.w.x	ft3,ra
+        assert_eq!(decode(0x580e35d3).unwrap(), Fsqrts(RType(0x580e35d3))); // fsqrt.s fa1,ft8,rup
+        assert_eq!(decode(0x5808c0d3).unwrap(), Fsqrts(RType(0x5808c0d3))); // fsqrt.s ft1,fa7,rmm
+        assert_eq!(decode(0x21ca0ed3).unwrap(), Fsgnjs(RType(0x21ca0ed3))); // fsgnj.s ft9,fs4,ft8
+        assert_eq!(decode(0x20d103d3).unwrap(), Fsgnjs(RType(0x20d103d3))); // fsgnj.s ft7,ft2,fa3
+        assert_eq!(decode(0x209c0d53).unwrap(), Fsgnjs(RType(0x209c0d53))); // fsgnj.s fs10,fs8,fs1
+        assert_eq!(decode(0x21dd1b53).unwrap(), Fsgnjns(RType(0x21dd1b53))); // fsgnjn.s fs6,fs10,ft9
+        assert_eq!(decode(0x20971153).unwrap(), Fsgnjns(RType(0x20971153))); // fsgnjn.s ft2,fa4,fs1
+        assert_eq!(decode(0x211d1953).unwrap(), Fsgnjns(RType(0x211d1953))); // fsgnjn.s fs2,fs10,fa7
+        assert_eq!(decode(0x20eb2153).unwrap(), Fsgnjxs(RType(0x20eb2153))); // fsgnjx.s ft2,fs6,fa4
+        assert_eq!(decode(0x219fa7d3).unwrap(), Fsgnjxs(RType(0x219fa7d3))); // fsgnjx.s fa5,ft11,fs9
+        assert_eq!(decode(0x215baad3).unwrap(), Fsgnjxs(RType(0x215baad3))); // fsgnjx.s fs5,fs7,fs5
+        assert_eq!(decode(0x286b82d3).unwrap(), Fmins(RType(0x286b82d3))); // fmin.s ft5,fs7,ft6
+        assert_eq!(decode(0x29ac88d3).unwrap(), Fmins(RType(0x29ac88d3))); // fmin.s fa7,fs9,fs10
+        assert_eq!(decode(0x29728c53).unwrap(), Fmins(RType(0x29728c53))); // fmin.s fs8,ft5,fs7
+        assert_eq!(decode(0x29441153).unwrap(), Fmaxs(RType(0x29441153))); // fmax.s ft2,fs0,fs4
+        assert_eq!(decode(0x29689fd3).unwrap(), Fmaxs(RType(0x29689fd3))); // fmax.s ft11,fa7,fs6
+        assert_eq!(decode(0x286a1fd3).unwrap(), Fmaxs(RType(0x286a1fd3))); // fmax.s ft11,fs4,ft6
+        assert_eq!(decode(0xc0056553).unwrap(), Fcvtws(RType(0xc0056553))); // fcvt.w.s a0,fa0,unknown
+        assert_eq!(decode(0xc006fad3).unwrap(), Fcvtws(RType(0xc006fad3))); // fcvt.w.s s5,fa3
+        assert_eq!(decode(0xc00fa8d3).unwrap(), Fcvtws(RType(0xc00fa8d3))); // fcvt.w.s a7,ft11,rdn
+        assert_eq!(decode(0xc014cb53).unwrap(), Fcvtwus(RType(0xc014cb53))); // fcvt.wu.s s6,fs1,rmm
+        assert_eq!(decode(0xc01698d3).unwrap(), Fcvtwus(RType(0xc01698d3))); // fcvt.wu.s a7,fa3,rtz
+        assert_eq!(decode(0xc01e5dd3).unwrap(), Fcvtwus(RType(0xc01e5dd3))); // fcvt.wu.s s11,ft8,unknown
+        assert_eq!(decode(0xe00482d3).unwrap(), Fmvxw(RType(0xe00482d3))); // fmv.x.w t0,fs1
+        assert_eq!(decode(0xe00d86d3).unwrap(), Fmvxw(RType(0xe00d86d3))); // fmv.x.w a3,fs11
+        assert_eq!(decode(0xe0088053).unwrap(), Fmvxw(RType(0xe0088053))); // fmv.x.w zero,fa7
+        assert_eq!(decode(0xa0742153).unwrap(), Feqs(RType(0xa0742153))); // feq.s sp,fs0,ft7
+        assert_eq!(decode(0xa0a0a153).unwrap(), Feqs(RType(0xa0a0a153))); // feq.s sp,ft1,fa0
+        assert_eq!(decode(0xa1aba853).unwrap(), Feqs(RType(0xa1aba853))); // feq.s a6,fs7,fs10
+        assert_eq!(decode(0xa0651953).unwrap(), Flts(RType(0xa0651953))); // flt.s s2,fa0,ft6
+        assert_eq!(decode(0xa0ab9f53).unwrap(), Flts(RType(0xa0ab9f53))); // flt.s t5,fs7,fa0
+        assert_eq!(decode(0xa19595d3).unwrap(), Flts(RType(0xa19595d3))); // flt.s a1,fa1,fs9
+        assert_eq!(decode(0xa1ff8d53).unwrap(), Fles(RType(0xa1ff8d53))); // fle.s s10,ft11,ft11
+        assert_eq!(decode(0xa0f40653).unwrap(), Fles(RType(0xa0f40653))); // fle.s a2,fs0,fa5
+        assert_eq!(decode(0xa1ab0c53).unwrap(), Fles(RType(0xa1ab0c53))); // fle.s s8,fs6,fs10
+        assert_eq!(decode(0xe00a1e53).unwrap(), Fclasss(RType(0xe00a1e53))); // fclass.s t3,fs4
+        assert_eq!(decode(0xe00f1c53).unwrap(), Fclasss(RType(0xe00f1c53))); // fclass.s s8,ft10
+        assert_eq!(decode(0xe00e9d53).unwrap(), Fclasss(RType(0xe00e9d53))); // fclass.s s10,ft9
+        assert_eq!(decode(0xd009d7d3).unwrap(), Fcvtsw(RType(0xd009d7d3))); // fcvt.s.w fa5,s3,unknown
+        assert_eq!(decode(0xd001a953).unwrap(), Fcvtsw(RType(0xd001a953))); // fcvt.s.w fs2,gp,rdn
+        assert_eq!(decode(0xd00507d3).unwrap(), Fcvtsw(RType(0xd00507d3))); // fcvt.s.w fa5,a0,rne
+        assert_eq!(decode(0xd01c27d3).unwrap(), Fcvtswu(RType(0xd01c27d3))); // fcvt.s.wu fa5,s8,rdn
+        assert_eq!(decode(0xd019edd3).unwrap(), Fcvtswu(RType(0xd019edd3))); // fcvt.s.wu fs11,s3,unknown
+        assert_eq!(decode(0xd012c3d3).unwrap(), Fcvtswu(RType(0xd012c3d3))); // fcvt.s.wu ft7,t0,rmm
+        assert_eq!(decode(0xf0000e53).unwrap(), Fmvwx(RType(0xf0000e53))); // fmv.w.x ft8,zero
+        assert_eq!(decode(0xf0098053).unwrap(), Fmvwx(RType(0xf0098053))); // fmv.w.x ft0,s3
+        assert_eq!(decode(0xf00081d3).unwrap(), Fmvwx(RType(0xf00081d3))); // fmv.w.x ft3,ra
     }
 }
