@@ -135,6 +135,23 @@ impl ShiftType {
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub struct R4Type(pub u32);
+impl R4Type {
+    pub fn rs3(&self) -> u32 {
+        (self.0 >> 27) & 0x1f
+    }
+    pub fn rs2(&self) -> u32 {
+        (self.0 >> 20) & 0x1f
+    }
+    pub fn rs1(&self) -> u32 {
+        (self.0 >> 15) & 0x1f
+    }
+    pub fn rd(&self) -> u32 {
+        (self.0 >> 7) & 0x1f
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
