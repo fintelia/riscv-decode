@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use crate::types::*;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -138,4 +140,66 @@ pub enum Instruction {
 
     #[doc(hidden)]
     __Nonexhaustive,
+}
+
+impl Display for Instruction {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        match self {
+            Instruction::Lui(u) => write!(f, "lui {}, {}", u.rd(), u.imm()),
+            Instruction::Auipc(u) => write!(f, "auipc {}, {}", u.rd(), u.imm()),
+            Instruction::Jal(j) => write!(f, "jal {}, {}", j.rd(), j.imm()),
+            Instruction::Jalr(i) => write!(f, "jalr {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Beq(b) => write!(f, "beq {}, {}, {}", b.rs1(), b.rs2(), b.imm()),
+            Instruction::Bne(b) => write!(f, "bne {}, {}, {}", b.rs1(), b.rs2(), b.imm()),
+            Instruction::Blt(b) => write!(f, "blt {}, {}, {}", b.rs1(), b.rs2(), b.imm()),
+            Instruction::Bge(b) => write!(f, "bge {}, {}, {}", b.rs1(), b.rs2(), b.imm()),
+            Instruction::Bltu(b) => write!(f, "bltu {}, {}, {}", b.rs1(), b.rs2(), b.imm()),
+            Instruction::Bgeu(b) => write!(f, "bgeu {}, {}, {}", b.rs1(), b.rs2(), b.imm()),
+            Instruction::Lb(i) => write!(f, "lb {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Lh(i) => write!(f, "lh {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Lw(i) => write!(f, "lw {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Lbu(i) => write!(f, "lbu {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Lhu(i) => write!(f, "lhu {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Lwu(i) => write!(f, "lwu {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Ld(i) => write!(f, "ld {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Sb(i) => write!(f, "sb {}, {}, {}", i.rs1(), i.rs2(), i.imm()),
+            Instruction::Sh(i) => write!(f, "sh {}, {}, {}", i.rs1(), i.rs2(), i.imm()),
+            Instruction::Sw(i) => write!(f, "sw {}, {}, {}", i.rs1(), i.rs2(), i.imm()),
+            Instruction::Sd(i) => write!(f, "sd {}, {}, {}", i.rs1(), i.rs2(), i.imm()),
+            Instruction::Fence(fen) => write!(f, "fence {} {}", fen.pred(), fen.succ()),
+            Instruction::FenceI => write!(f, "fence.i"),
+            Instruction::Add(r) => write!(f, "add {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Sub(r) => write!(f, "sub {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Sll(r) => write!(f, "sll {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Srl(r) => write!(f, "srl {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Sra(r) => write!(f, "sra {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Slt(r) => write!(f, "slt {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Sltu(r) => write!(f, "sltu {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Xor(r) => write!(f, "xor {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Sllw(r) => write!(f, "sllw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Srlw(r) => write!(f, "srlw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Sraw(r) => write!(f, "sraw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Mul(r) => write!(f, "mul {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Mulh(r) => write!(f, "mulh {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Mulhsu(r) => write!(f, "mulhsu {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Mulhu(r) => write!(f, "mulhu {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Div(r) => write!(f, "div {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Divu(r) => write!(f, "divu {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Rem(r) => write!(f, "rem {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Remu(r) => write!(f, "remu {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Mulw(r) => write!(f, "mulw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Divw(r) => write!(f, "divw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Divuw(r) => write!(f, "divuw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Remw(r) => write!(f, "remw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Addw(r) => write!(f, "addw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Subw(r) => write!(f, "subw {}, {}, {}", r.rd(), r.rs1(), r.rs2()),
+            Instruction::Addi(i) => write!(f, "addi {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Slti(i) => write!(f, "slti {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Sltiu(i) => write!(f, "sltiu {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Xori(i) => write!(f, "xori {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Ori(i) => write!(f, "ori {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            Instruction::Andi(i) => write!(f, "andi {}, {}, {}", i.rd(), i.rs1(), i.imm()),
+            _ => todo!(),
+        }
+    }
 }
