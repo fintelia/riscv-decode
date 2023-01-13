@@ -322,6 +322,11 @@ mod tests {
     //
     // $ rg "\tbne\t" | sort -R | tail -n 3 | xclip -selection c
 
+    #[test] 
+    fn sdsp() {
+        assert_eq!(decode(0x0000e486).unwrap(), Sd(SType(0x0420b423)));
+    }
+
     #[test]
     fn decoding() {
         assert_eq!(decode(0x00001a37).unwrap(), Lui(UType(0x00001a37))); // lui x20,0x1
