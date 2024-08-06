@@ -133,6 +133,34 @@ pub enum Instruction {
     Fcvtswu(RType),
     Fmvwx(RType),
 
+    // RV32A Standard Extension
+    AmoswapW(RType),
+    AmoaddW(RType),
+    AmoxorW(RType),
+    AmoandW(RType),
+    AmoorW(RType),
+    AmominW(RType),
+    AmomaxW(RType),
+    AmominuW(RType),
+    AmomaxuW(RType),
+
+    LrW(RType),
+    ScW(RType),
+
+    // RV64A Standard Extension
+    AmoswapD(RType),
+    AmoaddD(RType),
+    AmoxorD(RType),
+    AmoandD(RType),
+    AmoorD(RType),
+    AmominD(RType),
+    AmomaxD(RType),
+    AmominuD(RType),
+    AmomaxuD(RType),
+
+    LrD(RType),
+    ScD(RType),
+
     // Illegal
     Illegal,
 
