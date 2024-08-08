@@ -69,7 +69,7 @@ pub fn decode(i: u32) -> DecodingResult {
                 _ => Err(DecodingError::Unknown),
             },
             0b01010 => Err(DecodingError::Custom),
-            0b01011 => Err(DecodingError::Unimplemented), // AMO
+            0b01011 => decode_amo(i),
             0b01100 => decode_op(i),
             0b01101 => Ok(Instruction::Lui(UType(i))),
             0b01110 => decode_op32(i),
@@ -307,6 +307,35 @@ fn decode_system(i: u32) -> DecodingResult {
     }
 
     Err(DecodingError::Unknown)
+}
+
+fn decode_amo(i: u32) -> DecodingResult {
+    match (i >> 27, (i >> 12) & 0b111) {
+        (0b00010, 0b010) => Ok(Instruction::LrW(RType(i))),
+        (0b00011, 0b010) => Ok(Instruction::ScW(RType(i))),
+        (0b00001, 0b010) => Ok(Instruction::AmoswapW(RType(i))),
+        (0b00000, 0b010) => Ok(Instruction::AmoaddW(RType(i))),
+        (0b00100, 0b010) => Ok(Instruction::AmoxorW(RType(i))),
+        (0b01100, 0b010) => Ok(Instruction::AmoandW(RType(i))),
+        (0b01000, 0b010) => Ok(Instruction::AmoorW(RType(i))),
+        (0b10000, 0b010) => Ok(Instruction::AmominW(RType(i))),
+        (0b10100, 0b010) => Ok(Instruction::AmomaxW(RType(i))),
+        (0b11000, 0b010) => Ok(Instruction::AmominuW(RType(i))),
+        (0b11100, 0b010) => Ok(Instruction::AmomaxuW(RType(i))),
+
+        (0b00010, 0b011) => Ok(Instruction::LrD(RType(i))),
+        (0b00011, 0b011) => Ok(Instruction::ScD(RType(i))),
+        (0b00001, 0b011) => Ok(Instruction::AmoswapD(RType(i))),
+        (0b00000, 0b011) => Ok(Instruction::AmoaddD(RType(i))),
+        (0b00100, 0b011) => Ok(Instruction::AmoxorD(RType(i))),
+        (0b01100, 0b011) => Ok(Instruction::AmoandD(RType(i))),
+        (0b01000, 0b011) => Ok(Instruction::AmoorD(RType(i))),
+        (0b10000, 0b011) => Ok(Instruction::AmominD(RType(i))),
+        (0b10100, 0b011) => Ok(Instruction::AmomaxD(RType(i))),
+        (0b11000, 0b011) => Ok(Instruction::AmominuD(RType(i))),
+        (0b11100, 0b011) => Ok(Instruction::AmomaxuD(RType(i))),
+        _ => Err(DecodingError::Unknown),
+    }
 }
 
 #[cfg(test)]
@@ -648,5 +677,31 @@ mod tests {
         assert_eq!(decode(0xf0000e53).unwrap(), Fmvwx(RType(0xf0000e53))); // fmv.w.x ft8,zero
         assert_eq!(decode(0xf0098053).unwrap(), Fmvwx(RType(0xf0098053))); // fmv.w.x ft0,s3
         assert_eq!(decode(0xf00081d3).unwrap(), Fmvwx(RType(0xf00081d3))); // fmv.w.x ft3,ra
+    }
+
+    #[test]
+    fn amo() {
+        assert_eq!(decode(0x08b6a72f).unwrap(), AmoswapW(RType(0x08b6a72f))); // amoswap.w a4,a1,(a3)
+        assert_eq!(decode(0x00b6a72f).unwrap(), AmoaddW(RType(0x00b6a72f))); // amoadd.w a4,a1,(a3)
+        assert_eq!(decode(0x20b6a72f).unwrap(), AmoxorW(RType(0x20b6a72f))); // amoxor.w a4,a1,(a3)
+        assert_eq!(decode(0x60b6a72f).unwrap(), AmoandW(RType(0x60b6a72f))); // amoand.w a4,a1,(a3)
+        assert_eq!(decode(0x40b6a72f).unwrap(), AmoorW(RType(0x40b6a72f))); // amoor.w a4,a1,(a3)
+        assert_eq!(decode(0x80b6a72f).unwrap(), AmominW(RType(0x80b6a72f))); // amomin.w a4,a1,(a3)
+        assert_eq!(decode(0xa0b6a72f).unwrap(), AmomaxW(RType(0xa0b6a72f))); // amomax.w a4,a1,(a3)
+        assert_eq!(decode(0xc0b6a72f).unwrap(), AmominuW(RType(0xc0b6a72f))); // amominu.w a4,a1,(a3)
+        assert_eq!(decode(0xe0b6a72f).unwrap(), AmomaxuW(RType(0xe0b6a72f))); // amomaxu.w a4,a1,(a3)
+        assert_eq!(decode(0x100525af).unwrap(), LrW(RType(0x100525af))); // lr.w a1,(a0)
+        assert_eq!(decode(0x180525af).unwrap(), ScW(RType(0x180525af))); // sc.w a1,zero,(a0)
+        assert_eq!(decode(0x08b6b72f).unwrap(), AmoswapD(RType(0x08b6b72f))); // amoswap.d a4,a1,(a3)
+        assert_eq!(decode(0x00b6b72f).unwrap(), AmoaddD(RType(0x00b6b72f))); // amoadd.d a4,a1,(a3)
+        assert_eq!(decode(0x20b6b72f).unwrap(), AmoxorD(RType(0x20b6b72f))); // amoxor.d a4,a1,(a3)
+        assert_eq!(decode(0x60b6b72f).unwrap(), AmoandD(RType(0x60b6b72f))); // amoand.d a4,a1,(a3)
+        assert_eq!(decode(0x40b6b72f).unwrap(), AmoorD(RType(0x40b6b72f))); // amoor.d a4,a1,(a3)
+        assert_eq!(decode(0x80b6b72f).unwrap(), AmominD(RType(0x80b6b72f))); // amomin.d a4,a1,(a3)
+        assert_eq!(decode(0xa0b6b72f).unwrap(), AmomaxD(RType(0xa0b6b72f))); // amomax.d a4,a1,(a3)
+        assert_eq!(decode(0xc0b6b72f).unwrap(), AmominuD(RType(0xc0b6b72f))); // amominu.d a4,a1,(a3)
+        assert_eq!(decode(0xe0b6b72f).unwrap(), AmomaxuD(RType(0xe0b6b72f))); // amomaxu.d a4,a1,(a3)
+        assert_eq!(decode(0x1005372f).unwrap(), LrD(RType(0x1005372f))); // lr.d a1,(a0)
+        assert_eq!(decode(0x180535af).unwrap(), ScD(RType(0x180535af))); // sc.d a1,zero,(a0)
     }
 }
