@@ -50,8 +50,38 @@ pub fn decode_q01(_i: u32) -> DecodingResult {
     Err(DecodingError::Unimplemented)
 }
 
-pub fn decode_q10(_i: u32) -> DecodingResult {
-    Err(DecodingError::Unimplemented)
+pub fn decode_q10(i: u32) -> DecodingResult {
+    match i >> 13 {
+        0b110 => {
+            let imm = (i >> 7) & 0b111111;
+            let rs2 = (i >> 2) & 0b11111;
+            let offset_1 = imm & 0b11111;
+            let offset_2 = (imm >> 5) & 0b1;
+            Ok(Instruction::Sb(SType(
+                0b0100011 | // func [0: 6]
+                offset_1 << 7 | // [7: 11]
+                0b000 << 12 | // [12: 14]
+                (0x2 << 15) | // rs1 sp [15: 19]
+                (rs2 << 20) | // rs2 [20: 24]
+                offset_2 << 25
+            )))
+        }
+        0b111 => {
+            let imm = (i >> 7) & 0b111111;
+            let rs2 = (i >> 2) & 0b11111;
+            let offset_1 = ((imm >> 3) & 0b11) << 3;
+            let offset_2 = ((imm >> 5) & 0b1) | ((imm & 0b111) << 1);
+            Ok(Instruction::Sd(SType(
+                0b0100011 | // func [0: 6]
+                offset_1 << 7 | // [7: 11]
+                0b011 << 12 | // [12: 14]
+                (0x2 << 15) | // rs1 sp [15: 19]
+                (rs2 << 20) | // rs2 [20: 24]
+                offset_2 << 25
+            )))
+        }
+        _ => Err(DecodingError::Unimplemented)
+    }
 }
 
 #[cfg(test)]
