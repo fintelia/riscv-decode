@@ -53,23 +53,25 @@ pub fn decode_q01(_i: u32) -> DecodingResult {
 pub fn decode_q10(i: u32) -> DecodingResult {
     match i >> 13 {
         0b110 => {
+            // C.SWSP
             let imm = (i >> 7) & 0b111111;
             let rs2 = (i >> 2) & 0b11111;
-            let offset_1 = imm & 0b11111;
-            let offset_2 = (imm >> 5) & 0b1;
-            Ok(Instruction::Sb(SType(
+            let offset_1 = imm & 0b011100;
+            let offset_2 = (imm >> 5) & 0b1 | ((imm & 0b11) << 1);
+            Ok(Instruction::Sw(SType(
                 0b0100011 | // func [0: 6]
                 offset_1 << 7 | // [7: 11]
-                0b000 << 12 | // [12: 14]
+                0b010 << 12 | // [12: 14]
                 (0x2 << 15) | // rs1 sp [15: 19]
                 (rs2 << 20) | // rs2 [20: 24]
-                offset_2 << 25
+                offset_2 << 25,
             )))
         }
         0b111 => {
+            // C.SDSP
             let imm = (i >> 7) & 0b111111;
             let rs2 = (i >> 2) & 0b11111;
-            let offset_1 = ((imm >> 3) & 0b11) << 3;
+            let offset_1 = imm & 0b11000;
             let offset_2 = ((imm >> 5) & 0b1) | ((imm & 0b111) << 1);
             Ok(Instruction::Sd(SType(
                 0b0100011 | // func [0: 6]
@@ -77,10 +79,10 @@ pub fn decode_q10(i: u32) -> DecodingResult {
                 0b011 << 12 | // [12: 14]
                 (0x2 << 15) | // rs1 sp [15: 19]
                 (rs2 << 20) | // rs2 [20: 24]
-                offset_2 << 25
+                offset_2 << 25,
             )))
         }
-        _ => Err(DecodingError::Unimplemented)
+        _ => Err(DecodingError::Unimplemented),
     }
 }
 
@@ -97,5 +99,16 @@ mod tests {
         assert_eq!(decode_q00(0xe188).unwrap(), Sd(SType(0x00a5b023))); // sd a0,0(a1)
         assert_eq!(decode_q00(0xf5e0).unwrap(), Sd(SType(0x0e85b423))); // sd s0,232(a1)
         assert_eq!(decode_q00(0xc3b0).unwrap(), Sw(SType(0x04c7a023))); // sw a2,64(a5)
+    }
+
+    #[test]
+    fn q10() {
+        assert_eq!(decode(0xd402).unwrap(), Sw(SType(0x02012423))); // sw zero,40(sp)
+        assert_eq!(decode(0xc83e).unwrap(), Sw(SType(0x00f12823))); // sw a5,16(sp)
+        assert_eq!(decode(0xd056).unwrap(), Sw(SType(0x03512023))); // sw s5,32(sp)
+
+        assert_eq!(decode(0xe486).unwrap(), Sd(SType(0x04113423))); // sd ra,72(sp)
+        assert_eq!(decode(0xec26).unwrap(), Sd(SType(0x00913c23))); // sd s1,24(sp)
+        assert_eq!(decode(0xe456).unwrap(), Sd(SType(0x01513423))); // sd s5,8(sp)
     }
 }
