@@ -4,4 +4,7 @@
 [![Documentation](https://docs.rs/riscv-decode/badge.svg)](https://docs.rs/riscv-decode)
 ![Maintenance](https://img.shields.io/badge/maintenance%20status-passively%20maintained-yellow)
 
-A simple library for decoding RISC-V instructions. Currently supports all instructions in the base ISA as well as the M extension. A small number of compressed instructions are also supported. Pull requests welcome for additional instruction support.
+A simple library for decoding RISC-V instructions. Currently supports all
+instructions in the base ISA as well as the A and M extensions. The RV32F
+extension (but not RV64F) and a small number of compressed instructions are also
+supported. Pull requests welcome for additional instruction support.

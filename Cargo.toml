@@ -1,7 +1,6 @@
 [package]
 name = "riscv-decode"
-version = "0.2.2"
-authors = ["Jonathan Behrens <fintelia@gmail.com>"]
+version = "0.2.3"
 edition = "2018"
 description = "A simple library for decoding RISC-V instructions"
 repository = "https://github.com/fintelia/riscv-decode"
