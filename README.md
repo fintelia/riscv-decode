@@ -1,3 +1,6 @@
+**This project has migrated to Codeberg: https://codeberg.org/fintelia/riscv-decode**
+
+---
 # riscv-decode
 
 [![crates.io](https://img.shields.io/crates/v/riscv-decode.svg)](https://crates.io/crates/riscv-decode)
